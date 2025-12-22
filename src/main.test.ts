@@ -11,6 +11,19 @@ beforeEach(() => {
   jest.spyOn(core, 'setFailed').mockImplementation(jest.fn())
   jest.spyOn(core, 'startGroup').mockImplementation(jest.fn())
   jest.spyOn(core, 'getBooleanInput').mockReturnValue(false)
+  jest.spyOn(util, 'getBody').mockReturnValue(`
+Bumps [fake/package](https://github.com/) from 0.0.0 to 0.0.1.
+<details>
+<summary>Release notes</summary>
+<blockquote>
+<h2>0.0.1</h2>
+<h2>Summary</h2>
+<p>This is a fake description for a fake update</p>
+<h2>What's Changed</h2>
+* Nothing
+</blockquote>
+</details>
+`)
 })
 
 test('it early exits with an error if github-token is not set', async () => {
@@ -22,10 +35,10 @@ test('it early exits with an error if github-token is not set', async () => {
   expect(core.setFailed).toHaveBeenCalledWith(
     expect.stringContaining('github-token is not set!')
   )
-  /* eslint-disable no-unused-expressions */
+   
   expect(dependabotCommits.getMessage).not.toHaveBeenCalled
   expect(dependabotCommits.getAlert).not.toHaveBeenCalled
-  /* eslint-enable no-unused-expressions */
+   
 })
 
 test('it does nothing if the PR is not verified as from Dependabot', async () => {
@@ -40,9 +53,9 @@ test('it does nothing if the PR is not verified as from Dependabot', async () =>
   expect(core.setFailed).toHaveBeenCalledWith(
     expect.stringContaining('PR is not from Dependabot, nothing to do.')
   )
-  /* eslint-disable no-unused-expressions */
+   
   expect(dependabotCommits.getAlert).not.toHaveBeenCalled
-  /* eslint-enable no-unused-expressions */
+   
 })
 
 test('it does nothing if there is no metadata in the commit', async () => {
@@ -57,9 +70,9 @@ test('it does nothing if there is no metadata in the commit', async () => {
   expect(core.setFailed).toHaveBeenCalledWith(
     expect.stringContaining('PR does not contain metadata, nothing to do.')
   )
-  /* eslint-disable no-unused-expressions */
+   
   expect(dependabotCommits.getAlert).not.toHaveBeenCalled
-  /* eslint-enable no-unused-expressions */
+   
 })
 
 test('it sets the updated dependency as an output for subsequent actions when given a commit message for application', async () => {
@@ -499,9 +512,9 @@ test('it sets the action to failed if there is an unexpected exception', async (
   expect(core.setFailed).toHaveBeenCalledWith(
     expect.stringContaining('Something bad happened!')
   )
-  /* eslint-disable no-unused-expressions */
+   
   expect(dependabotCommits.getAlert).not.toHaveBeenCalled
-  /* eslint-enable no-unused-expressions */
+   
 })
 
 test('it sets the action to failed if there is a request error', async () => {
@@ -525,7 +538,7 @@ test('it sets the action to failed if there is a request error', async () => {
   expect(core.setFailed).toHaveBeenCalledWith(
     expect.stringContaining('(500) Something bad happened!')
   )
-  /* eslint-disable no-unused-expressions */
+   
   expect(dependabotCommits.getAlert).not.toHaveBeenCalled
-  /* eslint-enable no-unused-expressions */
+   
 })
